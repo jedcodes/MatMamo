@@ -6,7 +6,7 @@ import { useRouter } from 'expo-router';
 
 const {width, height} = Dimensions.get('window')
 
-export default function OnboardingScreen() {
+export default function OnboardingScreen() { 
   const router = useRouter()
 
   const handleDone = () => {
