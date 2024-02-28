@@ -3,14 +3,16 @@ import React from 'react'
 import Onboarding from 'react-native-onboarding-swiper';
 import LottieView from 'lottie-react-native';
 import { useRouter } from 'expo-router';
+import { storeData } from '@/utils/asyncStorage';
 
-const {width, height} = Dimensions.get('window')
+const { width } = Dimensions.get('window')
 
 export default function OnboardingScreen() { 
   const router = useRouter()
 
   const handleDone = () => {
     router.replace('/(tabs)/home/')
+    storeData('onboarded', '1')
   }
 
   return (

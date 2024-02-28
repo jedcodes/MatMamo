@@ -1,14 +1,16 @@
 import { Tabs } from "expo-router/tabs";
 import React from "react";
 import Ionicons from '@expo/vector-icons/Ionicons'
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 export default function _layout() {
   return (
     <Tabs
       screenOptions={{
+        tabBarShowLabel: false,
         tabBarStyle: {
-          backgroundColor: "#2d554a",
+          backgroundColor: "#f9f9f9",
         },
         headerShown: false,
         tabBarLabelStyle: {
@@ -22,25 +24,39 @@ export default function _layout() {
         options={{
           tabBarLabel: "Hjem",
           tabBarIcon: () => (
-            <Ionicons name="home-outline" size={19} color={"#ffffff"} />
+            <Ionicons name="home-outline" size={24} color={"#828282"} />
           ),
         }}
       />
       <Tabs.Screen
-        name="scan"
+        name="favorites"
         options={{
-          tabBarLabel: "Scan",
           tabBarIcon: () => (
-            <MaterialCommunityIcons name="line-scan" size={24} color="white" />
+           <MaterialIcons name="favorite-outline" size={24} color="#828282" />
           ),
         }}
       />
-      <Tabs.Screen
+       <Tabs.Screen
         name="shoppingList"
         options={{
-          tabBarLabel: "Handle Liste",
           tabBarIcon: () => (
-            <Ionicons name="list-outline" size={24} color="white" />
+            <Ionicons name="add" size={30} color="#828282" />
+          )
+        }}
+      />
+      <Tabs.Screen
+        name="storage"
+        options={{
+          tabBarIcon: () => (
+            <MaterialCommunityIcons name="line-scan" size={24} color="#828282" />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="user"
+        options={{
+          tabBarIcon: () => (
+            <FontAwesome5 name="user" size={24} color="#828282" />
           ),
         }}
       />

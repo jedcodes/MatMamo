@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function HomeScreen() {
   return (
-   <SafeAreaView className='flex-1 p-2 bg-primaryBg'>
+   <SafeAreaView className='flex-1 p-2 bg-white'>
     <StatusBar style='dark' />
     <Text className='text-primary text-3xl font-extrabold'>Home Screen</Text>
    </SafeAreaView>
