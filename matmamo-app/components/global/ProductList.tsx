@@ -1,25 +1,36 @@
-import { View, Text } from "react-native";
-import React from "react";
+import { View, Text, Pressable, Image } from "react-native";
+import React, { useState } from "react";
+import { IProduct, ProductResult } from "@/interfaces/IProduct";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
+import CheckBox from "expo-checkbox";
 
 type ProductListType = {
-  name: string;
-  price: number;
-  image: string;
-  isSelected: boolean;
+  products: IProduct;
 };
 
-export default function ProductList({
-  name,
-  price,
-  image,
-  isSelected,
-}: ProductListType) {
-  console.log(name, price);
+export default function ProductList({ products }: ProductListType) {
+  const [toggleCheckBox, setToggleCheckBox] = useState(false);
+
   return (
-    <View className="flex-row border-b-2 p-4 w-full">
-      <Text className="text-lg tracking-wide font-semibold text-emerald-600">
-        {name}
+    <Pressable className="flex-row p-3 items-center justify-between">
+      <Image
+        style={{ height: hp(8), width: wp(6) }}
+        source={{ uri: products.image }}
+      />
+      <Text
+        style={{ fontSize: hp(1.8) }}
+        className="tracking-wide font-semibold text-emerald-600"
+      >
+        {products.name}
       </Text>
-    </View>
+      <CheckBox
+        disabled={false}
+        value={toggleCheckBox}
+        onValueChange={() => setToggleCheckBox(!products.isSelected)}
+      />
+    </Pressable>
   );
 }

@@ -1,3 +1,4 @@
+import { ProductResult } from "@/interfaces/IProduct";
 import axios from "axios";
 
 const API_KEY = "wDk19Tn1ieRnAIQFIZub2pBXdM8hV19HpROcHKSp";
@@ -8,7 +9,7 @@ const axiosInstance = axios.create({
   headers: { Authorization: `Bearer ${API_KEY}` },
 });
 
-const apiCall = async (endpoint, params = {}) => {
+const apiCall = async (endpoint: string, params = {}) => {
   try {
     const response = await axiosInstance.get(endpoint, { params });
     return response.data;
@@ -18,7 +19,7 @@ const apiCall = async (endpoint, params = {}) => {
   }
 };
 
-export const fetchProducts = async () => {
+export const fetchProducts = async (): Promise<ProductResult> => {
   try {
     const data = await apiCall(BASE_URL + "products");
     return data;
@@ -29,7 +30,7 @@ export const fetchProducts = async () => {
   }
 };
 
-export const fetchSearchedProducts = async (term) => {
+export const fetchSearchedProducts = async (term: string): Promise<any> => {
   const data = await apiCall(BASE_URL + `products?search=${term}`);
 
   return data;

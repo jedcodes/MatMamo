@@ -1,20 +1,10 @@
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, ActivityIndicator } from "react-native";
 import React, { useMemo, useRef, useState } from "react";
 import { BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
 import { Ionicons } from "@expo/vector-icons";
 import TextInputBar from "./TextInputBar";
 import ProductList from "./ProductList";
 import { FlashList } from "@shopify/flash-list";
-
-const DATA = [
-  {
-    title: "First Item",
-  },
-  {
-    title: "Second Item",
-  },
-];
-
 import {
   fetchSearchedProducts,
   fetchProducts,
@@ -27,7 +17,6 @@ type BottomSheetType = {
 
 export default function MyBottomSheetModal({ sheetRef }: BottomSheetType) {
   //Local state
-
   const [selectedProducts, setSelectedProducts] = useState<IProduct[]>([]);
 
   const snapPoints = useMemo(() => ["50%", "95%"], []);
@@ -51,20 +40,23 @@ export default function MyBottomSheetModal({ sheetRef }: BottomSheetType) {
     const data = await fetchSearchedProducts(searchRef.current);
   };
 
-  const { isPending, error, data } = useQuery({
+  const {
+    isPending,
+    error,
+    data: products,
+  } = useQuery({
     queryKey: ["products"],
     queryFn: fetchAllProducts,
   });
 
   if (isPending) {
-    content = <Text>Loading...</Text>;
-  } else if (data) {
+    content = <ActivityIndicator size="large" color="#00b96d" />;
+  } else if (products) {
     content = (
       <FlashList
-        estimatedItemSize={200}
-        data={data}
+        data={products}
         keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => <Text>{item?.name}</Text>}
+        renderItem={({ item }: { item: IProduct }) => <Text>{item.name}</Text>}
       />
     );
   }

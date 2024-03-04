@@ -1,8 +1,8 @@
 import { Tabs } from "expo-router/tabs";
 import React from "react";
-import Ionicons from '@expo/vector-icons/Ionicons'
-import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { FontAwesome5 } from '@expo/vector-icons';
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 export default function _layout() {
   return (
@@ -32,23 +32,21 @@ export default function _layout() {
         name="favorites"
         options={{
           tabBarIcon: () => (
-           <MaterialIcons name="favorite-outline" size={24} color="#828282" />
+            <MaterialIcons name="favorite-outline" size={24} color="#828282" />
           ),
         }}
       />
-       <Tabs.Screen
+      <Tabs.Screen
         name="shoppingList"
         options={{
-          tabBarIcon: () => (
-            <Ionicons name="add" size={30} color="#828282" />
-          )
+          tabBarIcon: () => <Ionicons name="add" size={30} color="#828282" />,
         }}
       />
       <Tabs.Screen
-        name="storage"
+        name="search"
         options={{
           tabBarIcon: () => (
-            <MaterialCommunityIcons name="line-scan" size={24} color="#828282" />
+            <Ionicons name="search-outline" size={24} color="#828282" />
           ),
         }}
       />
