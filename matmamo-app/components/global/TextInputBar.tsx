@@ -14,7 +14,7 @@ export default function TextInputBar(props: any) {
     >
       <EvilIcons name="search" size={hp(3)} color="gray" />
       <TextInput
-        onSubmitEditing={props.handleInputChange}
+        onSubmitEditing={props.handleInputSubmit}
         onChangeText={(value) => (props.searchRef.current = value)}
         style={{ fontSize: hp(1.5) }}
         className="flex-1 font-semibold text-neutral-700"

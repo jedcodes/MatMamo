@@ -4,10 +4,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import useShoppingListStore from "@/services/stores/shoppingListStore";
 import { Ionicons } from "@expo/vector-icons";
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
 import { useRouter } from "expo-router";
 import ShoppingListCard from "@/components/ShoppingList/ShoppingListCard";
 import { data } from "@/constants/dummyData";

@@ -1,10 +1,25 @@
 import { View, Text, Pressable } from "react-native";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import TextInputBar from "./TextInputBar";
 import ProductList from "./ProductList";
-import { fetchAllProducts } from "@/services/api/apiService";
+import { FlashList } from "@shopify/flash-list";
+
+const DATA = [
+  {
+    title: "First Item",
+  },
+  {
+    title: "Second Item",
+  },
+];
+
+import {
+  fetchSearchedProducts,
+  fetchProducts,
+} from "@/services/api/apiService";
+import { useQuery } from "@tanstack/react-query";
 
 type BottomSheetType = {
   sheetRef: React.Ref<BottomSheetModal> | undefined;
@@ -12,19 +27,47 @@ type BottomSheetType = {
 
 export default function MyBottomSheetModal({ sheetRef }: BottomSheetType) {
   //Local state
-  const [fetchedProducts, setFetchedProducts] = useState<IProduct[]>([]);
+
   const [selectedProducts, setSelectedProducts] = useState<IProduct[]>([]);
 
   const snapPoints = useMemo(() => ["50%", "95%"], []);
   const searchRef: React.MutableRefObject<string> = useRef("");
 
-  // useEffect(() => {
-  //   fetchProducts();
-  // }, []);
+  let content;
 
-  const fetchProducts = async () => {
-    const products = await fetchAllProducts(searchRef.current);
+  const fetchAllProducts = async () => {
+    try {
+      const results: IProduct[] = await fetchProducts();
+      console.log(results);
+      return results;
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+
+      return [];
+    }
   };
+
+  const handleInputSubmit = async () => {
+    const data = await fetchSearchedProducts(searchRef.current);
+  };
+
+  const { isPending, error, data } = useQuery({
+    queryKey: ["products"],
+    queryFn: fetchAllProducts,
+  });
+
+  if (isPending) {
+    content = <Text>Loading...</Text>;
+  } else if (data) {
+    content = (
+      <FlashList
+        estimatedItemSize={200}
+        data={data}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => <Text>{item?.name}</Text>}
+      />
+    );
+  }
 
   return (
     <BottomSheetModal
@@ -33,7 +76,7 @@ export default function MyBottomSheetModal({ sheetRef }: BottomSheetType) {
       index={1}
       snapPoints={snapPoints}
     >
-      <BottomSheetView>
+      <BottomSheetView style={{ flex: 1 }}>
         <View className="flex-row items-center justify-between p-2">
           <Pressable>
             <Ionicons name="filter-outline" size={24} color="black" />
@@ -44,13 +87,16 @@ export default function MyBottomSheetModal({ sheetRef }: BottomSheetType) {
           </Pressable>
         </View>
         <View className="flex-row justify-between items-center px-2 mt-4">
-          <TextInputBar searchRef={searchRef} />
+          <TextInputBar
+            searchRef={searchRef}
+            handleInputSubmit={handleInputSubmit}
+          />
           <Pressable>
             <Ionicons name="barcode-outline" size={24} color="#00b96d" />
           </Pressable>
         </View>
-        <View className="mt-4 px-2">
-          <ProductList />
+        <View style={{ flex: 1, paddingHorizontal: 2 }} className="mt-4 px-2">
+          {content}
         </View>
       </BottomSheetView>
     </BottomSheetModal>
