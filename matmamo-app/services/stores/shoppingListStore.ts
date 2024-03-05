@@ -1,38 +1,32 @@
 import { create } from "zustand";
-import { v4 as uuidv4 } from "uuid";
 import { IProduct } from "@/interfaces/IProduct";
+import { IShoppingListState } from "@/interfaces/IShoppingList";
+import { Alert } from "react-native";
 
 const useShoppingListStore = create<IShoppingListState>()((set) => ({
   shoppingList: [],
-  shoppingCardList: [],
   productCount: 0,
-  id: Math.random() * 1000,
 
   // Legge til produkt i handlelisten
   addToShoppingList: (product: IProduct) =>
     set((state) => {
       const hasProduct = state.shoppingList.find((p) => p.id === product.id);
-
+      if (hasProduct) {
+        alert("Produktet er allerede i handlelisten");
+        return state;
+      }
       return {
         ...state,
         productCount: state.productCount++,
-        shoppingList: hasProduct
-          ? state.shoppingList.map((p) =>
-              p.id === product.id ? { ...p, quantity: p.quantity + 1 } : p
-            )
-          : [...state.shoppingList, { ...product, quantity: 1 }],
+        shoppingList: [...state.shoppingList, { ...product }],
       };
     }),
 
   // Fjerne produkt fra handlelisten
   removeFromShoppingList: (product: IProduct) =>
     set((state) => {
-      const updatedShoppingList = state.shoppingList.flatMap((p) =>
-        p.id === product.id
-          ? p.quantity > 1
-            ? [{ ...p, quantity: p.quantity - 1 }]
-            : []
-          : [p]
+      const updatedShoppingList = state.shoppingList.filter(
+        (p) => p.id !== product.id
       );
 
       return {
@@ -41,6 +35,10 @@ const useShoppingListStore = create<IShoppingListState>()((set) => ({
         shoppingList: updatedShoppingList,
       };
     }),
+
+  // Fjerne alle produkter fra handlelisten
+  clearShoppingList: () =>
+    set((state) => ({ ...state, shoppingList: [], productCount: 0 })),
 }));
 
 export default useShoppingListStore;
