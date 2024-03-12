@@ -1,27 +1,38 @@
 import { View, Text, Pressable, Image } from "react-native";
 import React, { useState } from "react";
-import { IProduct, ProductResult } from "@/interfaces/IProduct";
+import { IProduct } from "@/interfaces/IProduct";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import CheckBox from "expo-checkbox";
-import useShoppingListStore from "@/services/stores/shoppingListStore";
+import useShoppingListStore from "@/services/stores/productListStore";
 
 type ProductListType = {
-  products: IProduct;
+  products: IProduct & { isSelected: boolean };
 };
 
 export default function ProductList({ products }: ProductListType) {
-  const addToShoppingList = useShoppingListStore(
-    (state) => state.addToShoppingList
-  );
+  const { addProduct } = useShoppingListStore();
+
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
+
+  const handleCheckBox = () => {
+    const updatedProduct = { ...products, isSelected: !products.isSelected };
+    setToggleCheckBox(updatedProduct.isSelected);
+  };
 
   return (
     <Pressable
-      onPress={() => addToShoppingList(products)}
-      className="flex-row p-3 items-center justify-between mb-2"
+      style={{
+        backgroundColor: toggleCheckBox ? "#86efac" : "white",
+        borderRadius: 10,
+      }}
+      onPress={() => {
+        addProduct(products);
+        handleCheckBox();
+      }}
+      className="flex-row p-3 items-center justify-between mb-2 rounded-lg"
     >
       <View className="flex-row items-center">
         <Image
@@ -30,7 +41,10 @@ export default function ProductList({ products }: ProductListType) {
         />
         <View style={{ marginLeft: wp(6) }}>
           <Text
-            style={{ fontSize: hp(1.6) }}
+            style={{
+              fontSize: hp(1.6),
+              color: toggleCheckBox ? "#fff" : "black",
+            }}
             className="tracking-wide font-semibold"
           >
             {products.name}
@@ -43,7 +57,8 @@ export default function ProductList({ products }: ProductListType) {
       <CheckBox
         disabled={false}
         value={toggleCheckBox}
-        onValueChange={() => setToggleCheckBox(!products.isSelected)}
+        onValueChange={handleCheckBox}
+        color={toggleCheckBox ? "#00b96d" : "black"}
       />
     </Pressable>
   );

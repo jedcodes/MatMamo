@@ -1,10 +1,11 @@
-import { View, TextInput } from "react-native";
+import { View, TextInput, Pressable } from "react-native";
 import React, { useRef, useState } from "react";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import { EvilIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function TextInputBar(props: any) {
   return (
@@ -21,6 +22,10 @@ export default function TextInputBar(props: any) {
         placeholder="Search for a product or a recipe..."
         placeholderTextColor={"gray"}
       />
+
+      <Pressable>
+        <MaterialCommunityIcons name="barcode-scan" size={24} color="#00b96d" />
+      </Pressable>
     </View>
   );
 }

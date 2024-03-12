@@ -1,18 +1,34 @@
-import { Stack } from "expo-router";
-import React, { useEffect, useState } from "react";
+import { SplashScreen, Stack } from "expo-router";
+import React, { useCallback, useEffect, useState } from "react";
 import { getData } from "../utils/asyncStorage";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import {
+  useFonts,
+  Quicksand_300Light,
+  Quicksand_400Regular,
+  Quicksand_500Medium,
+  Quicksand_600SemiBold,
+  Quicksand_700Bold,
+} from "@expo-google-fonts/quicksand";
 
 const queryClient = new QueryClient();
 
 export default function _layout() {
-  const [showboarded, setShowboarded] = useState<null | boolean>(null);
+  const [fontsLoaded, fontError] = useFonts({
+    Quicksand_300Light,
+    Quicksand_400Regular,
+    Quicksand_500Medium,
+    Quicksand_600SemiBold,
+    Quicksand_700Bold,
+  });
 
   useEffect(() => {
     checkIfAlreadyOnboarded();
   }, []);
+
+  const [showboarded, setShowboarded] = useState<null | boolean>(null);
 
   const checkIfAlreadyOnboarded = async () => {
     // check if user has already onboarded

@@ -1,8 +1,16 @@
 export interface IProductListState {
-  productList: Array<IProduct>;
+  id: number;
+  title: string;
+  productList: Array<IProduct & { isSelected: boolean }>;
   productCount: number;
   addToShoppingList: (product: IProduct) => void;
   removeFromShoppingList: (product: IProduct) => void;
+  clearShoppingList: () => void;
+  updateShoppingList: (
+    productId: number,
+    updatedProduct: Partial<IProduct>
+  ) => void;
+  deleteShoppingList: (productId: number) => void;
 }
 
 export interface ProductResult {
@@ -33,7 +41,6 @@ export interface IProduct {
   labels: (Label | Labels2 | Labels3 | Labels4)[];
   created_at: string;
   updated_at: string;
-  isSelected: boolean;
 }
 
 interface Meta {
