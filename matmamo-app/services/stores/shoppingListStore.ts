@@ -1,37 +1,79 @@
-import {create} from 'zustand';
+import { create } from "zustand";
+import { IProduct } from "@/interfaces/IProduct";
 
+interface ShoppingList {
+  id: number;
+  title: string;
+  productList: Array<IProduct & { isSelected: boolean }>;
+}
 
- const useShoppingListStore = create<IShoppingListState>()((set) => ({
+interface ShoppingListState {
+  shoppingLists: ShoppingList[];
+  updateShoppingListTitle: (listId: number, title: string) => void;
+  addProduct: (listId: number, product: IProduct) => void;
+  updateProduct: (
+    listId: number,
+    productId: number,
+    updatedProduct: Partial<IProduct & { isSelected: boolean }>
+  ) => void;
+  deleteProduct: (listId: number, productId: number) => void;
+}
 
-  shoppingList: [],
-  productCount: 0,
+const useShoppingListStore = create<ShoppingListState>((set) => ({
+  shoppingLists: [],
 
-  // Legge til produkt i handlelisten
-  addToShoppingList: (product: IProduct) => set((state) => {
-    const hasProduct = state.shoppingList.find(p => p.id === product.id);
+  updateShoppingListTitle(listId, title) {
+    set((state) => ({
+      shoppingLists: state.shoppingLists.map((list) =>
+        list.id === listId ? { ...list, title } : list
+      ),
+    }));
+  },
 
-    return {
-      ...state,
-      productCount: state.productCount++,
-      shoppingList: hasProduct ? 
-        state.shoppingList.map(p => p.id === product.id ? {...p, quantity: p.quantity + 1} : p) :
-        [...state.shoppingList, {...product, quantity: 1}] 
-    };
-  }),
+  addProduct: (listId, product) =>
+    set((state) => ({
+      shoppingLists: state.shoppingLists.map((list) =>
+        list.id === listId
+          ? {
+              ...list,
+              productList: [
+                ...list.productList,
+                { ...product, isSelected: false },
+              ],
+            }
+          : list
+      ),
+    })),
 
-  // Fjerne produkt fra handlelisten
-  removeFromShoppingList: (product: IProduct) => set((state) => {
-    const updatedShoppingList = state.shoppingList.flatMap(p => 
-      p.id === product.id ? (p.quantity > 1 ? [{...p, quantity: p.quantity - 1}] : []) : [p]
-    );
+  updateProduct: (listId, productId, updatedProduct) =>
+    set((state) => ({
+      shoppingLists: state.shoppingLists.map((list) =>
+        list.id === listId
+          ? {
+              ...list,
+              productList: list.productList.map((product) =>
+                product.id === productId
+                  ? { ...product, ...updatedProduct }
+                  : product
+              ),
+            }
+          : list
+      ),
+    })),
 
-    return {
-      ...state,
-      productCount: state.productCount - 1,
-      shoppingList: updatedShoppingList 
-    };
-  }),
+  deleteProduct: (listId, productId) =>
+    set((state) => ({
+      shoppingLists: state.shoppingLists.map((list) =>
+        list.id === listId
+          ? {
+              ...list,
+              productList: list.productList.filter(
+                (product) => product.id !== productId
+              ),
+            }
+          : list
+      ),
+    })),
 }));
-
 
 export default useShoppingListStore;

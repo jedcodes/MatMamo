@@ -1,18 +1,10 @@
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
-import React from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { StatusBar } from 'expo-status-bar'
+import { View, Text } from "react-native";
+import React from "react";
 
-export default function FavoritesScreen() {
-
-
+export default function index() {
   return (
-    <SafeAreaView className='flex-1 bg-white'>
-      <StatusBar style='dark' />
-      <ScrollView className='p-2'>
-       <Text>Favorites Screen</Text>
-      </ScrollView>
-    </SafeAreaView>
-  )
+    <View>
+      <Text>index</Text>
+    </View>
+  );
 }
-

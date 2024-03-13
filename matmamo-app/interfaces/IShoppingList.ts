@@ -1,7 +1,9 @@
+import { IProduct } from "./IProduct";
 
-interface IShoppingListState {
-  shoppingList: Array<IProduct>;
-  productCount: number;
-  addToShoppingList: (product: IProduct) => void;
-  removeFromShoppingList: (product: IProduct) => void;
+export interface IShoppingListState {
+  id: number;
+  shoppingList: IProduct[];
+  createNewShoppingList: (products: IProduct[]) => void;
+  updateShoppingList: (id: number, products: IProduct[]) => void;
+  deleteShoppingList: (id: number) => void;
 }

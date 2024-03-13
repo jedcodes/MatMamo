@@ -8,6 +8,9 @@ module.exports = {
         primary: "#2d554a",
         white: "#f9f9f9",
       },
+      fontFamily: {
+        quicksand: ["Quicksand", "sans-serif"],
+      },
     },
   },
   plugins: [],
