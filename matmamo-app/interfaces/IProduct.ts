@@ -1,18 +1,3 @@
-export interface IProductListState {
-  id: number;
-  title: string;
-  productList: Array<IProduct & { isSelected: boolean }>;
-  productCount: number;
-  addToShoppingList: (product: IProduct) => void;
-  removeFromShoppingList: (product: IProduct) => void;
-  clearShoppingList: () => void;
-  updateShoppingList: (
-    productId: number,
-    updatedProduct: Partial<IProduct>
-  ) => void;
-  deleteShoppingList: (productId: number) => void;
-}
-
 export interface ProductResult {
   data: IProduct[];
   links: Links;

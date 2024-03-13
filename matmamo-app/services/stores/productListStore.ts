@@ -1,59 +1,44 @@
 import { create } from "zustand";
 import { IProduct } from "@/interfaces/IProduct";
 
-interface ShoppingList {
-  id: number;
-  title: string;
+export interface ProductListState {
   productList: Array<IProduct & { isSelected: boolean }>;
-}
-
-interface ShoppingListState {
-  shoppingList: ShoppingList;
   addProduct: (product: IProduct) => void;
-  updateProduct: (
-    productId: number,
-    updatedProduct: Partial<IProduct & { isSelected: boolean }>
-  ) => void;
-  deleteProduct: (productId: number) => void;
+  removeProduct: (productId: number) => void;
+  toggleProduct: (productId: number) => void;
 }
 
-const useShoppingListStore = create<ShoppingListState>((set) => ({
-  shoppingList: {
-    id: Math.random() * 9999,
-    title: "My Shopping List",
-    productList: [],
-  },
+const useProductStore = create<ProductListState>((set) => ({
+  productList: [],
 
   addProduct: (product) =>
+    set((state) => {
+      const hasProduct = state.productList.some((p) => p.id === product.id);
+      if (hasProduct) {
+        alert("Product already exists in the list");
+        return state;
+      } else {
+        return {
+          productList: [...state.productList, { ...product, isSelected: true }],
+        };
+      }
+    }),
+
+  removeProduct: (productId) =>
     set((state) => ({
-      shoppingList: {
-        ...state.shoppingList,
-        productList: [
-          ...state.shoppingList.productList,
-          { ...product, isSelected: false },
-        ],
-      },
+      productList: state.productList.filter(
+        (product) => product.id !== productId
+      ),
     })),
 
-  updateProduct: (productId, updatedProduct) =>
+  toggleProduct: (productId) =>
     set((state) => ({
-      shoppingList: {
-        ...state.shoppingList,
-        productList: state.shoppingList.productList.map((product) =>
-          product.id === productId ? { ...product, ...updatedProduct } : product
-        ),
-      },
-    })),
-
-  deleteProduct: (productId) =>
-    set((state) => ({
-      shoppingList: {
-        ...state.shoppingList,
-        productList: state.shoppingList.productList.filter(
-          (product) => product.id !== productId
-        ),
-      },
+      productList: state.productList.map((product) =>
+        product.id === productId
+          ? { ...product, isSelected: !product.isSelected }
+          : product
+      ),
     })),
 }));
 
-export default useShoppingListStore;
+export default useProductStore;

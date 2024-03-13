@@ -6,32 +6,29 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import CheckBox from "expo-checkbox";
-import useShoppingListStore from "@/services/stores/productListStore";
+import useProductStore from "@/services/stores/productListStore";
 
 type ProductListType = {
   products: IProduct & { isSelected: boolean };
 };
 
 export default function ProductList({ products }: ProductListType) {
-  const { addProduct } = useShoppingListStore();
+  const { addProduct, toggleProduct, removeProduct, productList } =
+    useProductStore();
+  const [selected, setSelected] = useState(false);
 
-  const [toggleCheckBox, setToggleCheckBox] = useState(false);
-
-  const handleCheckBox = () => {
-    const updatedProduct = { ...products, isSelected: !products.isSelected };
-    setToggleCheckBox(updatedProduct.isSelected);
+  const handleItemClicked = () => {
+    addProduct(products);
+    setSelected(!selected);
   };
 
   return (
     <Pressable
       style={{
-        backgroundColor: toggleCheckBox ? "#86efac" : "white",
+        backgroundColor: selected ? "#86efac" : "white",
         borderRadius: 10,
       }}
-      onPress={() => {
-        addProduct(products);
-        handleCheckBox();
-      }}
+      onPress={handleItemClicked}
       className="flex-row p-3 items-center justify-between mb-2 rounded-lg"
     >
       <View className="flex-row items-center">
@@ -43,7 +40,7 @@ export default function ProductList({ products }: ProductListType) {
           <Text
             style={{
               fontSize: hp(1.6),
-              color: toggleCheckBox ? "#fff" : "black",
+              color: selected ? "#fff" : "black",
             }}
             className="tracking-wide font-semibold"
           >
@@ -56,9 +53,9 @@ export default function ProductList({ products }: ProductListType) {
       </View>
       <CheckBox
         disabled={false}
-        value={toggleCheckBox}
-        onValueChange={handleCheckBox}
-        color={toggleCheckBox ? "#00b96d" : "black"}
+        value={selected}
+        onValueChange={() => setSelected(!selected)}
+        color={selected ? "#00b96d" : "black"}
       />
     </Pressable>
   );

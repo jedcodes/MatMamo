@@ -1,5 +1,5 @@
 import { View, Text, ActivityIndicator, Pressable } from "react-native";
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { fetchProducts } from "@/services/api/apiService";
@@ -9,8 +9,13 @@ import TextInputBar from "@/components/global/TextInputBar";
 import { FlashList } from "@shopify/flash-list";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import MyBottomSheet from "@/components/BottomSheet/MyBottomSheet";
+import useProductStore from "@/services/stores/productListStore";
+import { IProduct } from "@/interfaces/IProduct";
 
 export default function SearchScreen() {
+  const { productList, addProduct, toggleProduct, removeProduct } =
+    useProductStore();
+
   const searchRef: React.MutableRefObject<string> = useRef("");
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
